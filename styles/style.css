@@ -1,11 +1,40 @@
 body {
   padding: 0;
   margin: 0;
+  overflow: hidden; /* Prevent scrollbar */
 }
 
 #game-intro {
   width: 100vw;
   height: 100vh;
+  background-image: url(../images/space.jpg);
+  background-size: cover; /* Cover the entire div */
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.middle-box {
+  width: 700px;
+  height: 500px;
+  background-color: rgba(255, 255, 255, 0); /* Transparent white background */
+  border: 2px solid white;
+  border-radius: 25px;
+}
+
+.middle-box h1 {
+  color: white;
+  font-size: 4em;
+}
+
+#start-button {
+  font-size: 2em;
+  color: white;
+  padding: 10px 20px;
+  border: 2px solid white;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0); /* Transparent white background */
 }
 
 #game-screen {
@@ -14,4 +43,18 @@ body {
 
 #game-end {
   display: none;
+}
+
+@media screen and (min-width: 480px) and (max-width: 760px) {
+  .middle-box {
+    width: 400px;
+    height: 500px;
+  }
+  .middle-box h1 {
+    font-size: 2.5em;
+  }
+  #start-button {
+    font-size: 1.5em;
+    padding: 5px 20px;
+  }
 }
