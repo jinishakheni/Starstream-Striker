@@ -1,0 +1,17 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+#game-intro {
+  width: 100vw;
+  height: 100vh;
+}
+
+#game-screen {
+  display: none;
+}
+
+#game-end {
+  display: none;
+}
