@@ -2,6 +2,7 @@ body {
   padding: 0;
   margin: 0;
   overflow: hidden; /* Prevent scrollbar */
+  text-align: center;
 }
 
 #game-intro {
