@@ -3,7 +3,7 @@ class Game {
     this.introScreen = document.querySelector("#game-intro");
     this.gameScreen = document.querySelector("#game-screen");
     this.endScreen = document.querySelector("#game-end");
-
+    this.obstacleCollection = ["ufo", "rock", "asteroid"];
     this.player;  // Player
     this.bullets = [];  // Bullets
     this.obstacles = [];  // Obstacles
@@ -16,6 +16,7 @@ class Game {
     this.gameLoopFrecuency = Math.round(1000 / 60); // update 60 frames per second
 
     this.currentBulletFrame = 0; // Keep track of bullat frames
+    this.currentObstacleFrame = 0;  // Keep track of obstacle frames
   }
 
   startGame() {
@@ -41,8 +42,8 @@ class Game {
         if (currentBullet.top <= 0) {
           currentBullet.element.remove();
           removeBullets = true;
-        }
-        currentBullet.renderBullet();
+        } else
+          currentBullet.renderBullet();
       });
 
       // Create two new bullets after every 5 frames and delete removed bullets from array 
@@ -55,6 +56,26 @@ class Game {
           this.bullets.splice(0, 2);
       }
 
+      let removeObstacle = false;
+      this.currentObstacleFrame += 1;
+
+      // Render and Remove obstacle from the screen
+      this.obstacles.forEach(currentObstacle => {
+        if (currentObstacle.top >= this.gameScreen.clientHeight) {
+          removeObstacle = true;
+          currentObstacle.element.remove();
+        } else
+          currentObstacle.renderObstacle();
+      });
+
+      // Create two new obstacle after every 100 frames and delete removed obstacle from array 
+      if (this.currentObstacleFrame % 100 === 0) {
+        this.obstacles.push(new Obstacle(this.gameScreen, this.obstacleCollection[Math.floor(Math.random() * this.obstacleCollection.length)]));
+
+        // Remove obstacle from array after obstacle element removed from the screen
+        if (removeObstacle)
+          this.obstacles.splice(0, 1);
+      }
     }, this.gameLoopFrecuency);
   }
 }
