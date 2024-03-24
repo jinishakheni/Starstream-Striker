@@ -9,17 +9,33 @@
   <body>
     <main>
       <!-- #game-intro is initially shown on the game start screen -->
-      <div id="game-intro"></div>
+      <div id="game-intro">
+        <div class="middle-box">
+          <h1>Starstream Striker</h1>
+          <button id="start-button">Start Game</button>
+        </div>
+      </div>
 
       <!-- #game-screen is initially hidden using CSS style display: none -->
-      <div id="game-screen"></div>
+      <div id="game-screen">
+        <p id="score">Score: <span>0</span></p>
+        <p id="life">Life: <span>3</span></p>
+      </div>
 
       <!-- #game-end is initially hidden using CSS style display: none -->
       <div id="game-end">
-        <p>Game Over</p>
-        <p>Score: <span>0</span></p>
+        <div class="middle-box">
+          <h1>Game Over</h1>
+          <h3>Score:</h3>
+          <span>0</span> <br />
+          <button id="restart-button">Restart Game</button>
+        </div>
       </div>
     </main>
+    <script src="./js/obstacle.js"></script>
+    <script src="./js/bullet.js"></script>
+    <script src="./js/player.js"></script>
+    <script src="./js/game.js"></script>
     <script src="./js/app.js"></script>
   </body>
 </html>
