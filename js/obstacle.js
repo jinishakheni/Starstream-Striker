@@ -1,6 +1,7 @@
 class Obstacle {
   constructor(gameScreen, obstacle) {
     this.gameScreen = gameScreen;
+    this.sustain = 5;
     this.width = 70;
     this.height = 70;
     this.top = -this.height;
@@ -19,5 +20,12 @@ class Obstacle {
   renderObstacle() {
     this.top += 4;
     this.element.style.top = `${this.top}px`;
+  }
+
+  attackObstacle(bullat) {
+    const obstaclRect = this.element.getBoundingClientRect();
+    const bullateRect = bullat.element.getBoundingClientRect();
+
+    return obstaclRect.left < bullateRect.right && obstaclRect.right > bullateRect.left && obstaclRect.bottom > bullateRect.top && obstaclRect.top < bullateRect.bottom;
   }
 }

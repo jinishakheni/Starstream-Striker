@@ -1,14 +1,22 @@
 window.onload = function () {
   // Start script execution after window gets loaded on the browser
   const startButton = document.querySelector("#start-button");
+  const restartButton = document.querySelector("#restart-button");
   let game;
 
-  startButton.addEventListener("click", () => {
-
+  function start() {
     // Instantiate new game object and start game
     game = new Game();
     game.startGame();
+  }
+
+  startButton.addEventListener("click", () => {
+    start();
   });
+
+  restartButton.addEventListener("click", () => {
+    start();
+  })
 
   // Key down event listener
   document.addEventListener("keydown", (event) => {

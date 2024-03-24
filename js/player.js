@@ -42,4 +42,11 @@ class Player {
     if (this.top > this.gameScreen.clientHeight - this.height)
       this.top = this.gameScreen.clientHeight - this.height
   }
+
+  didCollide(obstacle) {
+    const playerRect = this.element.getBoundingClientRect();
+    const obstacleRect = obstacle.element.getBoundingClientRect();
+
+    return (playerRect.top < obstacleRect.bottom && playerRect.bottom - (this.height / 2) > obstacleRect.top && playerRect.left + (this.width / 3) < obstacleRect.right && playerRect.right - (this.width / 3) > obstacleRect.left) || (playerRect.left < obstacleRect.right && playerRect.right > obstacleRect.left && playerRect.top + (this.height / 2) < obstacleRect.bottom && playerRect.bottom > obstacleRect.top)
+  }
 }

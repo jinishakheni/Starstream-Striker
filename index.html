@@ -17,12 +17,19 @@
       </div>
 
       <!-- #game-screen is initially hidden using CSS style display: none -->
-      <div id="game-screen"></div>
+      <div id="game-screen">
+        <p id="score">Score: <span>0</span></p>
+        <p id="life">Life: <span>3</span></p>
+      </div>
 
       <!-- #game-end is initially hidden using CSS style display: none -->
       <div id="game-end">
-        <p>Game Over</p>
-        <p>Score: <span>0</span></p>
+        <div class="middle-box">
+          <h1>Game Over</h1>
+          <h3>Score:</h3>
+          <span>0</span> <br />
+          <button id="restart-button">Restart Game</button>
+        </div>
       </div>
     </main>
     <script src="./js/obstacle.js"></script>

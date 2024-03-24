@@ -29,7 +29,8 @@ body {
   font-size: 4em;
 }
 
-#start-button {
+#start-button,
+#restart-button {
   font-size: 2em;
   color: white;
   padding: 10px 20px;
@@ -62,8 +63,42 @@ body {
   }
 }
 
+#game-screen #score {
+  height: 100px;
+  width: 50px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  font-size: 2em;
+}
+
+#game-screen #life {
+  height: 100px;
+  width: 50px;
+  position: absolute;
+  top: 120px;
+  left: 0;
+  color: white;
+  font-size: 2em;
+}
+
 #game-end {
+  width: 100vw;
+  height: 100vh;
+  background-image: url(../images/space.jpg);
+  background-size: cover; /* Cover the entire div */
+  background-position: center;
   display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+#game-end h3,
+#game-end span {
+  font-size: 1.5em;
+  color: white;
+  display: inline; /* Display H3 and span in one line */
 }
 
 @media screen and (min-width: 480px) and (max-width: 760px) {
