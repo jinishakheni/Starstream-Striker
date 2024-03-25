@@ -4,18 +4,13 @@ window.onload = function () {
   const restartButton = document.querySelector("#restart-button");
   let game;
 
-  function start() {
-    // Instantiate new game object and start game
+  startButton.addEventListener("click", () => {
     game = new Game();
     game.startGame();
-  }
-
-  startButton.addEventListener("click", () => {
-    start();
   });
 
   restartButton.addEventListener("click", () => {
-    start();
+    game.restartGame();
   })
 
   // Key down event listener

@@ -32,7 +32,10 @@
               </p>
             </div>
           </div>
-          <button id="start-button">Start Game</button>
+          <div id="start-form">
+            <input type="text" name="player" />
+            <button id="start-button">Start Game</button>
+          </div>
           <button id="instruction-button">Instruction</button>
           <div id="instructions">
             Use the arrow keys on your keyboard to move your spaceship<br />
@@ -53,9 +56,12 @@
       <div id="game-end">
         <div class="middle-box">
           <h1>Game Over</h1>
-          <h3>Score:</h3>
+          <h3>Score</h3>
           <span>0</span> <br />
+          <p>Better luck next time</p>
           <button id="restart-button">Restart Game</button>
+          <h3>High Score</h3>
+          <ol class="high-score-list"></ol>
         </div>
       </div>
     </main>

@@ -7,6 +7,11 @@ class Game {
     this.lifeDisplay = document.querySelector("#life span");
     this.endScore = document.querySelector("#game-end span")
 
+    this.inputField = document.querySelector("#start-form input");
+    this.playerName = this.inputField.value;
+    this.highScoreList = document.querySelector(".high-score-list");
+    this.highScore = JSON.parse(localStorage.getItem("highScore"));
+
     this.obstacleCollection = ["ufo", "rock", "asteroid"];
     this.player;  // Player
     this.bullets = [];  // Bullets
@@ -37,6 +42,14 @@ class Game {
     // Instantiate player
     this.player = new Player(this.gameScreen);
     this.animateGame();
+  }
+
+  restartGame() {
+    // Hide the start screen
+    this.introScreen.style.display = "flex";
+
+    // Show the game screen
+    this.endScreen.style.display = "none";
   }
 
   animateGame() {
@@ -126,7 +139,19 @@ class Game {
         this.endScreen.style.display = "flex";
         this.endScore.innerText = this.score;
         clearInterval(this.gameIntervalId);
+        this.handleHighScore();
       }
     }, this.gameLoopFrecuency);
+  }
+
+  handleHighScore() {
+    const highestScoreList = [...this.highScore, { playerName: this.playerName, score: this.score }].toSorted((firstPlayer, secondPlayer) => secondPlayer.score - firstPlayer.score).splice(0, 8);
+    localStorage.setItem("highScore", JSON.stringify(highestScoreList));
+    this.highScoreList.innerText = "";
+    highestScoreList.forEach(currentScore => {
+      const liElement = document.createElement("li");
+      liElement.innerText = `${currentScore.score} by ${currentScore.playerName}`;
+      this.highScoreList.appendChild(liElement);
+    });
   }
 }
