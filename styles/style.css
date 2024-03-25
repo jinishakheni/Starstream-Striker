@@ -119,10 +119,11 @@ input {
   height: 100vh;
   overflow: hidden;
   position: relative;
-  background-image: url(../images/space.jpg);
+  background-image: url(../images/space.png);
   background-size: cover; /* Cover the entire div */
   background-position: center;
   animation: slide 5s linear infinite;
+  justify-content: space-between;
 }
 
 @keyframes slide {
@@ -137,24 +138,13 @@ input {
   }
 }
 
-#game-screen #score {
-  height: 100px;
-  width: 50px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: white;
-  font-size: 2em;
-}
-
+#game-screen #score,
 #game-screen #life {
-  height: 100px;
-  width: 50px;
-  position: absolute;
-  top: 120px;
-  left: 0;
+  height: 50px;
+  width: 150px;
   color: white;
-  font-size: 2em;
+  font-size: 1em;
+  padding-left: 10px;
 }
 
 #game-end {
