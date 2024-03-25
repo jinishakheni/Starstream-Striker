@@ -1,7 +1,7 @@
 class Obstacle extends SpaceObject {
   constructor(gameScreen, obstacle) {
     super(gameScreen, obstacle);
-    this.sustain = 5;
+    this.sustain = obstacle.sustain;
   }
 
   attackObstacle(bullet) {

@@ -16,32 +16,38 @@ class Game {
       {
         path: "./images/space_creature1.gif",
         height: 80,
-        width: 100
+        width: 100,
+        sustain: 3
       },
       {
         path: "./images/space_creature2.gif",
         height: 100,
-        width: 100
+        width: 100,
+        sustain: 3
       },
       {
         path: "./images/rock1.png",
         height: 80,
-        width: 80
+        width: 80,
+        sustain: 2
       },
       {
         path: "./images/enemy_warship1.gif",
         height: 80,
-        width: 60
+        width: 60,
+        sustain: 4
       },
       {
         path: "./images/enemy_warship2.png",
         height: 60,
-        width: 100
+        width: 100,
+        sustain: 4
       },
       {
         path: "./images/enemy_warship3.png",
-        height: 100,
-        width: 100
+        height: 70,
+        width: 90,
+        sustain: 4
       }
     ]
     this.powerCardCollection = ["./images/power2.png", "./images/power3.png", "./images/power4.png"];
@@ -177,7 +183,7 @@ class Game {
 
     // Create new power after every 500 frames and delete removed power from array
     if (this.currentPowerFrame % 500 === 0) {
-      this.powers.push(new Power(this.gameScreen, { path: this.powerCardCollection[Math.floor(Math.random() * this.powerCardCollection.length)], height: 70, width: 40 }));
+      this.powers.push(new Power(this.gameScreen, { path: this.powerCardCollection[Math.floor(Math.random() * this.powerCardCollection.length)], height: 40, width: 30 }));
 
       if (removePower) this.powers.splice(0, 1);  // Remove bullet from array after bullet element removed from the screen
     }
