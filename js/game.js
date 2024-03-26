@@ -136,7 +136,10 @@ class Game {
               currentBullet.element.remove();
               currentObstacle.sustain -= 1;
               if (currentObstacle.sustain === 0) {
-                currentObstacle.element.remove();
+                currentObstacle.element.src = './images/blast.gif';
+                setTimeout(() => {
+                  currentObstacle.element.remove();
+                }, 600);
                 this.score += 1;
                 this.scoreDisplay.innerText = this.score;
               }
@@ -148,6 +151,10 @@ class Game {
       // Check for obstacle collision with ship
       if (this.player.didCollide(currentObstacle)) {
         this.lifes -= 1;
+        this.player.element.src = "./images/collide-ship.png";
+        setTimeout(() => {
+          this.player.element.src = "./images/ship.png"
+        }, 200);
         this.lifeDisplay.innerText = this.lifes;
         currentObstacle.element.remove();
         if (this.lifes === 0) this.gameIsOver = true;
