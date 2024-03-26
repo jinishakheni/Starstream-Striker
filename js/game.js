@@ -4,14 +4,38 @@ class Game {
     this.gameScreen = document.querySelector("#game-screen");
     this.endScreen = document.querySelector("#game-end");
     this.scoreDisplay = document.querySelector("#score span");
-    this.lifeDisplay = document.querySelector("#life span");
     this.endScore = document.querySelector("#game-end span");
     this.endMessage = document.querySelector("#game-end p");
 
     this.inputField = document.querySelector("#start-form input");
     this.playerName = this.inputField.value;
     this.highScoreList = document.querySelector(".high-score-list");
+    this.lifeElement = document.querySelector("#life");
     this.highScore = JSON.parse(localStorage.getItem("highScore")) ?? [];
+
+
+    this.player;  // Player
+    this.obstacles = [];  // Obstacles
+    this.bullets = [];  // Bullets
+    this.powers = []; // Power
+
+    this.score = 0; // Game score
+    this.lifes = 3; // Player lifes
+    this.gameIsOver = false;  // Game status
+
+    this.gameIntervalId;    // stores interval id
+    this.gameLoopFrecuency = Math.round(1000 / 60); // update 60 frames per second
+
+    this.currentBulletFrame = 0; // Keep track of bullat frames
+    this.currentObstacleFrame = 0;  // Keep track of obstacle frames
+    this.currentPowerFrame = 0; // Keeo track of power card
+
+    this.bulletSpeed = 20;
+    this.bulletSpeedFlag = false;
+    this.bulletSpeedTimeLimit = 300;
+    this.bulletCount = 1;
+    this.bulletCountFlag = false;
+    this.bulletCountTimeLimit = 300;
 
     this.obstacleCollection = [
       {
@@ -65,29 +89,6 @@ class Game {
         behaviour: "boosterPower"
       }
     ];
-
-    this.player;  // Player
-    this.obstacles = [];  // Obstacles
-    this.bullets = [];  // Bullets
-    this.powers = []; // Power
-
-    this.score = 0; // Game score
-    this.lifes = 3; // Player lifes
-    this.gameIsOver = false;  // Game status
-
-    this.gameIntervalId;    // stores interval id
-    this.gameLoopFrecuency = Math.round(1000 / 60); // update 60 frames per second
-
-    this.currentBulletFrame = 0; // Keep track of bullat frames
-    this.currentObstacleFrame = 0;  // Keep track of obstacle frames
-    this.currentPowerFrame = 0; // Keeo track of power card
-
-    this.bulletSpeed = 20;
-    this.bulletSpeedFlag = false;
-    this.bulletSpeedTimeLimit = 300;
-    this.bulletCount = 1;
-    this.bulletCountFlag = false;
-    this.bulletCountTimeLimit = 300
   }
 
   startGame() {
@@ -95,9 +96,15 @@ class Game {
     this.gameScreen.style.display = "flex";   // Show the game screen
 
     // Show default score and lives
-    this.lifeDisplay.innerText = 3;
     this.scoreDisplay.innerText = 0;
-
+    for (let index = 0; index < this.lifes; index++) {
+      const element = document.createElement("img");
+      element.src = "./images/life.png";
+      element.style.width = "30px";
+      element.style.height = "30px";
+      element.style.padding = "5px";
+      this.lifeElement.appendChild(element);
+    }
     this.player = new Player(this.gameScreen);  // Initialize player
     this.animateGame();
   }
@@ -178,12 +185,15 @@ class Game {
 
       // Check for obstacle collision with ship
       if (this.player.didCollide(currentObstacle)) {
+        const lifeToRemove = this.lifeElement.querySelector(`img:nth-child(${this.lifes})`)
+        lifeToRemove.remove();
         this.lifes -= 1;
+
         this.player.element.src = "./images/collide-ship.png";
         setTimeout(() => {
           this.player.element.src = "./images/ship.png"
         }, 1000);
-        this.lifeDisplay.innerText = this.lifes;
+
         currentObstacle.element.remove();
         if (this.lifes === 0) this.gameIsOver = true;
       }
@@ -267,6 +277,7 @@ class Game {
     this.obstacles.forEach(currentObstacale => currentObstacale.element.remove());    // Remove obstacles from the screen
     this.bullets.forEach(currentBullet => currentBullet.element.remove());    // Remove bulletes from the screen
     this.powers.forEach(currentPower => currentPower.element.remove());    // Remove power cards from the screen
+    this.lifeElement.innerHTML = "";
 
     // Change display
     this.gameScreen.style.display = "none";

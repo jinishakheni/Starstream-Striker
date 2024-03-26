@@ -138,13 +138,19 @@ input {
   }
 }
 
-#game-screen #score,
-#game-screen #life {
+#game-screen #score {
   height: 50px;
   width: 150px;
   color: white;
   font-size: 1em;
   padding-left: 10px;
+}
+
+#game-screen #life {
+  height: 50px;
+  width: 200px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 #game-end {

@@ -33,12 +33,7 @@
             </div>
           </div>
           <form id="start-form">
-            <input
-              type="text"
-              id="player"
-              placeholder="Your Name here"
-              required
-            />
+            <input type="text" id="player" placeholder="Your Name" required />
             <button type="submit" id="start-button">Start Game</button>
           </form>
           <button id="instruction-button">Instruction</button>
@@ -54,7 +49,8 @@
       <!-- #game-screen is initially hidden using CSS style display: none -->
       <div id="game-screen">
         <p id="score">Score: <span>0</span></p>
-        <p id="life">Life: <span>3</span></p>
+        <div id="life"></div>
+        <!-- <p id="life">Life: <span>3</span></p> -->
       </div>
 
       <!-- #game-end is initially hidden using CSS style display: none -->
