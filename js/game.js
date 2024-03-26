@@ -5,12 +5,13 @@ class Game {
     this.endScreen = document.querySelector("#game-end");
     this.scoreDisplay = document.querySelector("#score span");
     this.lifeDisplay = document.querySelector("#life span");
-    this.endScore = document.querySelector("#game-end span")
+    this.endScore = document.querySelector("#game-end span");
+    this.endMessage = document.querySelector("#game-end p");
 
     this.inputField = document.querySelector("#start-form input");
     this.playerName = this.inputField.value;
     this.highScoreList = document.querySelector(".high-score-list");
-    this.highScore = JSON.parse(localStorage.getItem("highScore"));
+    this.highScore = JSON.parse(localStorage.getItem("highScore")) ?? [];
 
     this.obstacleCollection = [
       {
@@ -221,7 +222,7 @@ class Game {
       liElement.innerText = `${currentScore.score} by ${currentScore.playerName}`;
       this.highScoreList.appendChild(liElement);
     });
-
+    this.endMessage.innerText = this.score && scoreList[0].score <= this.score ? "Good Job" : "Better luck next time";
     localStorage.setItem("highScore", JSON.stringify(scoreList));   // Update high score list in local storage
   }
 
