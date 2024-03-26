@@ -51,7 +51,20 @@ class Game {
         sustain: 4
       }
     ]
-    this.powerCardCollection = ["./images/power2.png", "./images/power3.png", "./images/power4.png"];
+    this.powerCardCollection = [
+      {
+        path: "./images/power2.png",
+        behaviour: "bulletPower"
+      },
+      {
+        path: "./images/power3.png",
+        behaviour: "shipPower"
+      },
+      {
+        path: "./images/power4.png",
+        behaviour: "boosterPower"
+      }
+    ];
 
     this.player;  // Player
     this.obstacles = [];  // Obstacles
@@ -72,6 +85,9 @@ class Game {
     this.bulletSpeed = 20;
     this.bulletSpeedFlag = false;
     this.bulletSpeedTimeLimit = 300;
+    this.bulletCount = 1;
+    this.bulletCountFlag = false;
+    this.bulletCountTimeLimit = 300
   }
 
   startGame() {
@@ -93,21 +109,26 @@ class Game {
 
   renderBullets() {
     this.currentBulletFrame += 1;
-    let removeBullets = false;
 
     // Render and Remove bullets from the screen
     this.bullets.forEach(currentBullet => {
       if (currentBullet.top <= 0) {
         currentBullet.element.remove();
-        removeBullets = true;
+        currentBullet.remove = true;
       } else
         currentBullet.renderBullet();
     });
 
     // Create new bullet after every bulletSpeed frames and delete removed bullets from array 
     if (this.currentBulletFrame % this.bulletSpeed === 0) {
-      this.bullets.push(new Bullet(this.gameScreen, this.player));
-      if (removeBullets) this.bullets.splice(0, 1);    // Remove bullet from array after bullet element removed from the screen
+      if (this.bulletCount === 1 || this.bulletCount === 3)
+        this.bullets.push(new Bullet(this.gameScreen, this.player, "center"));
+      if (this.bulletCount === 2 || this.bulletCount === 3) {
+        this.bullets.push(new Bullet(this.gameScreen, this.player, "left"));
+        this.bullets.push(new Bullet(this.gameScreen, this.player, "right"));
+      }
+
+      this.bullets = this.bullets.filter(bullet => !bullet.remove);    // Remove bullet from array after bullet element removed from the screen
     }
 
     if (this.bulletSpeedFlag) this.bulletSpeedTimeLimit -= 1;
@@ -115,6 +136,12 @@ class Game {
       this.bulletSpeedFlag = false;
       this.bulletSpeed = 20;
       this.bulletSpeedTimeLimit = 300;
+    }
+    if (this.bulletCountFlag) this.bulletCountTimeLimit -= 1;
+    if (!this.bulletCountTimeLimit) {
+      this.bulletCountFlag = false;
+      this.bulletCount = 1;
+      this.bulletCountTimeLimit = 300;
     }
   }
 
@@ -155,7 +182,7 @@ class Game {
         this.player.element.src = "./images/collide-ship.png";
         setTimeout(() => {
           this.player.element.src = "./images/ship.png"
-        }, 200);
+        }, 1000);
         this.lifeDisplay.innerText = this.lifes;
         currentObstacle.element.remove();
         if (this.lifes === 0) this.gameIsOver = true;
@@ -181,20 +208,58 @@ class Game {
         removePower = true;
       } else
         currentPower.renderObject();
+
       if (currentPower.collectPower(this.player)) {
         currentPower.element.remove();
-        this.bulletSpeed -= 5;
-        this.bulletSpeedFlag = true;
-        this.bulletSpeedTimeLimit = 300;
+        switch (currentPower.behaviour) {
+          case "bulletPower": {
+            this.bulletCount = 1;
+            this.bulletSpeed -= 10;
+            this.bulletSpeedFlag = true;
+            this.bulletSpeedTimeLimit = 300;
+            break;
+          };
+          case "shipPower": {
+            this.bulletCount = 3;
+            this.bulletCountFlag = true;
+            this.bulletCountTimeLimit = 300;
+            break;
+          };
+          case "boosterPower": {
+            this.bulletCount = 2;
+            this.bulletCountFlag = true;
+            this.bulletCountTimeLimit = 300;
+            this.bulletSpeed -= 10;
+            this.bulletSpeedFlag = true;
+            this.bulletSpeedTimeLimit = 300;
+            break;
+          };
+          default:
+            break;
+        }
       }
     });
 
     // Create new power after every 500 frames and delete removed power from array
     if (this.currentPowerFrame % 500 === 0) {
-      this.powers.push(new Power(this.gameScreen, { path: this.powerCardCollection[Math.floor(Math.random() * this.powerCardCollection.length)], height: 40, width: 30 }));
+      this.powers.push(new Power(this.gameScreen, { ...this.powerCardCollection[Math.floor(Math.random() * this.powerCardCollection.length)], ...{ height: 40, width: 30 } }));
 
       if (removePower) this.powers.splice(0, 1);  // Remove bullet from array after bullet element removed from the screen
     }
+  }
+
+  handleHighScore() {
+    this.highScoreList.innerText = "";    // Reset high score list on end screen
+
+    // Create new high score list & render on the end screen
+    const scoreList = [...this.highScore, { playerName: this.playerName, score: this.score }].toSorted((firstPlayer, secondPlayer) => secondPlayer.score - firstPlayer.score).splice(0, 8);
+    scoreList.forEach(currentScore => {
+      const liElement = document.createElement("li");
+      liElement.innerText = `${currentScore.score} by ${currentScore.playerName}`;
+      this.highScoreList.appendChild(liElement);
+    });
+    this.endMessage.innerText = this.score && scoreList[0].score <= this.score ? "Good Job" : "Better luck next time";
+    localStorage.setItem("highScore", JSON.stringify(scoreList));   // Update high score list in local storage
   }
 
   endGame() {
@@ -212,19 +277,6 @@ class Game {
     this.handleHighScore();   // Display high score list
   }
 
-  handleHighScore() {
-    this.highScoreList.innerText = "";    // Reset high score list on end screen
-
-    // Create new high score list & render on the end screen
-    const scoreList = [...this.highScore, { playerName: this.playerName, score: this.score }].toSorted((firstPlayer, secondPlayer) => secondPlayer.score - firstPlayer.score).splice(0, 8);
-    scoreList.forEach(currentScore => {
-      const liElement = document.createElement("li");
-      liElement.innerText = `${currentScore.score} by ${currentScore.playerName}`;
-      this.highScoreList.appendChild(liElement);
-    });
-    this.endMessage.innerText = this.score && scoreList[0].score <= this.score ? "Good Job" : "Better luck next time";
-    localStorage.setItem("highScore", JSON.stringify(scoreList));   // Update high score list in local storage
-  }
 
   animateGame() {
     this.gameIntervalId = setInterval(() => {

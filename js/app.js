@@ -1,10 +1,11 @@
 window.onload = function () {
   // Start script execution after window gets loaded on the browser
-  const startButton = document.querySelector("#start-button");
+  const startForm = document.querySelector("#start-form");
   const restartButton = document.querySelector("#restart-button");
   let game;
 
-  startButton.addEventListener("click", () => {
+  startForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent form submission, if the input field is empty
     game = new Game();
     game.startGame();
   });

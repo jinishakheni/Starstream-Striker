@@ -1,6 +1,7 @@
 class Power extends SpaceObject {
   constructor(gameScreen, power) {
     super(gameScreen, power);
+    this.behaviour = power.behaviour;
   }
 
   collectPower(player) {

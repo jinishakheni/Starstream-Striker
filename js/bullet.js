@@ -5,7 +5,9 @@ class Bullet {
     this.height = 15;
     this.width = 30;
     this.top = this.player.top + this.player.height / 2 - 10;
-    this.left = this.player.left + this.player.width / 2 - this.width / 2;
+    if (position === "center") this.left = this.player.left + this.player.width / 2 - this.width / 2;
+    if (position === "left") this.left = this.player.left;
+    if (position === "right") this.left = this.player.left + this.player.width - 30;
     this.element = document.createElement("img");
     this.element.src = "./images/bullet.png";
     this.element.style.height = `${this.height}px`;
@@ -14,6 +16,7 @@ class Bullet {
     this.element.style.left = `${this.left}px`;
     this.element.style.position = "absolute";
     this.gameScreen.appendChild(this.element);
+    this.remove = false;
   }
 
   renderBullet() {
