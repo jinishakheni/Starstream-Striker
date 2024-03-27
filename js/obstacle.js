@@ -1,31 +1,13 @@
-class Obstacle {
+class Obstacle extends SpaceObject {
   constructor(gameScreen, obstacle) {
-    this.gameScreen = gameScreen;
-    this.sustain = 5;
-    this.width = 70;
-    this.height = 70;
-    this.top = -this.height;
-    this.left = Math.floor(Math.random() * (this.gameScreen.clientWidth - this.width));
-
-    this.element = document.createElement("img");
-    this.element.src = `./images/${obstacle}.png`;
-    this.element.style.width = `${this.width}px`;
-    this.element.style.height = `${this.height}px`;
-    this.element.style.top = `${this.top}px`;
-    this.element.style.left = `${this.left}px`;
-    this.element.style.position = "absolute"
-    this.gameScreen.appendChild(this.element);
+    super(gameScreen, obstacle);
+    this.sustain = obstacle.sustain;
   }
 
-  renderObstacle() {
-    this.top += 4;
-    this.element.style.top = `${this.top}px`;
-  }
-
-  attackObstacle(bullat) {
+  attackObstacle(bullet) {
     const obstaclRect = this.element.getBoundingClientRect();
-    const bullateRect = bullat.element.getBoundingClientRect();
+    const bulletRect = bullet.element.getBoundingClientRect();
 
-    return obstaclRect.left < bullateRect.right && obstaclRect.right > bullateRect.left && obstaclRect.bottom > bullateRect.top && obstaclRect.top < bullateRect.bottom;
+    return obstaclRect.left < bulletRect.right && obstaclRect.right > bulletRect.left && obstaclRect.bottom > bulletRect.top && obstaclRect.top < bulletRect.bottom;
   }
 }

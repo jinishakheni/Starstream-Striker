@@ -1,8 +1,8 @@
 class Player {
   constructor(gameScreen) {
     this.gameScreen = gameScreen;
-    this.height = 80;
-    this.width = 60;
+    this.height = 100;
+    this.width = 80;
     this.left = this.gameScreen.clientWidth / 2 - this.width / 2;
     this.top = this.gameScreen.clientHeight - this.height - 30;
     this.speed = 5;

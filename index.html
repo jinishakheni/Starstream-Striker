@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="shortcut icon" href="./images/logo.png" type="image/x-icon" />
     <title>Starstream Striker</title>
   </head>
   <body>
@@ -12,26 +19,60 @@
       <div id="game-intro">
         <div class="middle-box">
           <h1>Starstream Striker</h1>
-          <button id="start-button">Start Game</button>
+          <img id="logo" src="./images/logo.png" alt="" />
+          <div class="intro">
+            <h2>Welcome to Space War</h2>
+            <div id="intro">
+              <p>
+                In the endless reaches of space, your spaceship speeds ahead,
+                facing a constant stream of dangers from all sides. Dodge
+                asteroids and blast away alien enemies with your continuous
+                barrage of bullets. <br />
+                Your mission: Save the galaxy from destruction and become a hero
+                of the stars.
+              </p>
+            </div>
+          </div>
+          <form id="start-form">
+            <input type="text" id="player" placeholder="Your Name" required />
+            <button type="submit" id="start-button">Start Game</button>
+          </form>
+          <div id="settings">
+            <button id="instruction-button">Instruction</button>
+            <div id="instructions">
+              Use the arrow keys on your keyboard to move your spaceship<br />
+              The spaceship fires bullets continuously, and every space object
+              will be destroyed after sustaining five hits from the bullets.<br />
+              Don't let your spaceship collide with them, you will have 3
+              lives<br />
+            </div>
+            <button id="mute-button"></button>
+          </div>
         </div>
       </div>
 
       <!-- #game-screen is initially hidden using CSS style display: none -->
       <div id="game-screen">
         <p id="score">Score: <span>0</span></p>
-        <p id="life">Life: <span>3</span></p>
+        <div id="life"></div>
+        <!-- <p id="life">Life: <span>3</span></p> -->
       </div>
 
       <!-- #game-end is initially hidden using CSS style display: none -->
       <div id="game-end">
         <div class="middle-box">
           <h1>Game Over</h1>
-          <h3>Score:</h3>
+          <h3>Score</h3>
           <span>0</span> <br />
+          <p>Better luck next time</p>
           <button id="restart-button">Restart Game</button>
+          <h3>High Score</h3>
+          <ol class="high-score-list"></ol>
         </div>
       </div>
     </main>
+    <script src="./js/space.js"></script>
+    <script src="./js/power.js"></script>
     <script src="./js/obstacle.js"></script>
     <script src="./js/bullet.js"></script>
     <script src="./js/player.js"></script>

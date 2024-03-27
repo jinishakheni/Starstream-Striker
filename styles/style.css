@@ -3,12 +3,13 @@ body {
   margin: 0;
   overflow: hidden; /* Prevent scrollbar */
   text-align: center; /* Center content of entire body */
+  font-family: "Press Start 2P";
 }
 
 #game-intro {
   width: 100vw;
   height: 100vh;
-  background-image: url(../images/space.jpg);
+  background-image: url(../images/start-screen.jpeg);
   background-size: cover; /* Cover the entire div */
   background-position: center;
   display: flex;
@@ -18,25 +19,113 @@ body {
 
 .middle-box {
   width: 700px;
-  height: 500px;
-  background-color: rgba(255, 255, 255, 0); /* Transparent white background */
-  border: 2px solid white;
-  border-radius: 25px;
+  height: 650px;
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent white background */
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid white;
 }
 
 .middle-box h1 {
+  color: #d2a64b;
+  font-size: 2.5em;
+  line-height: 1.2;
+  text-shadow: 3px 3px red, 0 0 1em blue, 0 0 1.2em blue;
+}
+
+.middle-box p {
   color: white;
-  font-size: 4em;
+}
+
+#logo {
+  height: 200px;
+  width: 200px;
+}
+
+.intro {
+  color: white;
+}
+
+.intro h2 {
+  font-size: 1.5em;
+  text-shadow: 3px 3px red, 0 0 1em blue, 0 0 1.2em blue;
+}
+
+#intro {
+  padding: 0 75px;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+#start-form,
+#settings {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+input {
+  width: 300px;
+  height: 35px;
+  border: 2mm ridge #522911;
+  border-radius: 5px;
+  margin: 10px;
+  font-family: inherit;
 }
 
 #start-button,
+#instruction-button,
 #restart-button {
-  font-size: 2em;
+  font-size: 1em;
   color: white;
   padding: 10px 20px;
-  border: 2px solid white;
+  border: 2mm ridge #522911;
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0); /* Transparent white background */
+  text-shadow: 1px 1px red, 0 0 1em blue;
+  margin: 10px;
+  font-family: inherit;
+}
+
+#mute-button {
+  border: 2mm ridge #522911;
+  border-radius: 5px;
+  height: 50px;
+  width: 50px;
+  margin: 10px;
+  background-image: url("../images/mute.png");
+  background-position: center center;
+  padding: 10px;
+  background-size: 80%;
+  background-repeat: no-repeat;
+}
+
+#start-button:hover,
+#restart-button:hover,
+#instruction-button:hover {
+  background-color: black;
+}
+
+#instructions {
+  display: none;
+  width: 670px;
+  height: 90px;
+  background-color: black;
+  color: white;
+  font-size: 10px;
+  line-height: 2.3;
+  padding: 10px 10px;
+  position: absolute;
+  top: 59%;
+  left: 27.5%;
+  border: 1px solid white;
+}
+
+#instruction-button:hover + #instructions {
+  display: block;
 }
 
 #game-screen {
@@ -45,10 +134,11 @@ body {
   height: 100vh;
   overflow: hidden;
   position: relative;
-  background-image: url(../images/space.jpg);
+  background-image: url(../images/space.png);
   background-size: cover; /* Cover the entire div */
   background-position: center;
   animation: slide 5s linear infinite;
+  justify-content: space-between;
 }
 
 @keyframes slide {
@@ -64,29 +154,24 @@ body {
 }
 
 #game-screen #score {
-  height: 100px;
-  width: 50px;
-  position: absolute;
-  top: 0;
-  left: 0;
+  height: 50px;
+  width: 150px;
   color: white;
-  font-size: 2em;
+  font-size: 1em;
+  padding-left: 10px;
 }
 
 #game-screen #life {
-  height: 100px;
-  width: 50px;
-  position: absolute;
-  top: 120px;
-  left: 0;
-  color: white;
-  font-size: 2em;
+  height: 50px;
+  width: 200px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 #game-end {
   width: 100vw;
   height: 100vh;
-  background-image: url(../images/space.jpg);
+  background-image: url(../images/start-screen.jpeg);
   background-size: cover; /* Cover the entire div */
   background-position: center;
   display: none;
@@ -101,16 +186,68 @@ body {
   display: inline; /* Display H3 and span in one line */
 }
 
+.high-score-list {
+  color: white;
+  line-height: 1.5;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
 @media screen and (min-width: 480px) and (max-width: 760px) {
   .middle-box {
     width: 400px;
-    height: 500px;
+    height: 550px;
   }
+
   .middle-box h1 {
-    font-size: 2.5em;
-  }
-  #start-button {
     font-size: 1.5em;
-    padding: 5px 20px;
+    line-height: 1.4;
+  }
+
+  #logo {
+    height: 150px;
+    width: 150px;
+  }
+
+  .intro h2 {
+    font-size: 1em;
+  }
+
+  #intro {
+    padding: 0 60px;
+    font-size: 0.5em;
+    line-height: 1.5;
+  }
+
+  input {
+    width: 160px;
+    height: 21px;
+  }
+
+  #start-button,
+  #instruction-button {
+    font-size: 0.8em;
+    padding: 5px;
+  }
+
+  #mute-button {
+    height: 21px;
+    width: 21px;
+  }
+
+  #instructions {
+    width: 380px;
+    height: 90px;
+    font-size: 0.5em;
+    line-height: 1.5;
+    position: absolute;
+    top: 54%;
+    left: 16%;
+  }
+
+  .high-score-list {
+    line-height: 1.2;
   }
 }

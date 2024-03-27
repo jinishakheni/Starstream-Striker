@@ -1,22 +1,22 @@
 window.onload = function () {
   // Start script execution after window gets loaded on the browser
-  const startButton = document.querySelector("#start-button");
+  const startForm = document.querySelector("#start-form");
   const restartButton = document.querySelector("#restart-button");
+  const volumeButton = document.querySelector("#mute-button");
   let game;
 
-  function start() {
-    // Instantiate new game object and start game
+  startForm.addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent form submission, if the input field is empty
+    buttonClickAudio.play();
+    backgroundAudio.volume = parseFloat(0.2);
     game = new Game();
     game.startGame();
-  }
-
-  startButton.addEventListener("click", () => {
-    start();
   });
 
   restartButton.addEventListener("click", () => {
-    start();
-  })
+    buttonClickAudio.play();
+    game.restartGame();
+  });
 
   // Key down event listener
   document.addEventListener("keydown", (event) => {
@@ -28,7 +28,7 @@ window.onload = function () {
       game.player.directionX = game.player.speed;
     if (event.code === "ArrowLeft")
       game.player.directionX = -game.player.speed;
-  })
+  });
 
   // Key up event listener
   document.addEventListener("keyup", (event) => {
@@ -40,5 +40,24 @@ window.onload = function () {
       game.player.directionX = 0;
     if (event.code === "ArrowLeft")
       game.player.directionX = 0;
-  })
+  });
+
+  let backgroundAudio = new Audio('./audio/game-audio.mp3');
+  backgroundAudio.loop = true; // Loop the audio
+  backgroundAudio.pause(); // Start playing the audio
+  localStorage.setItem("volume", 0);
+  function toggleMute() {
+    if (backgroundAudio.paused) {
+      backgroundAudio.play();
+      localStorage.setItem("volume", 1);
+      volumeButton.style.backgroundImage = "url('./images/volume.png')";
+    } else {
+      backgroundAudio.pause();
+      localStorage.setItem("volume", 0);
+      volumeButton.style.backgroundImage = "url('./images/mute.png')"
+    }
+  }
+  volumeButton.addEventListener('click', toggleMute);
+  const buttonClickAudio = new Audio('./audio/button-click-audio.mp3');
+
 }
