@@ -12,7 +12,7 @@ class Game {
     this.highScoreList = document.querySelector(".high-score-list");
     this.lifeElement = document.querySelector("#life");
     this.highScore = JSON.parse(localStorage.getItem("highScore")) ?? [];
-
+    this.volume = Number(localStorage.getItem("volume"));
 
     this.player;  // Player
     this.obstacles = [];  // Obstacles
@@ -36,7 +36,14 @@ class Game {
     this.bulletCount = 1;
     this.bulletCountFlag = false;
     this.bulletCountTimeLimit = 300;
+    this.flickerPlayer = false;
+    this.flickerPlayerTime = 100;
 
+    this.explosionAudio = new Audio('./audio/explosion-audio.mp3');
+    this.collisionAudio = new Audio('./audio/respawn-audio.mp3');
+    this.bulletAudio = new Audio('./audio/bullet-audio.mp3');
+    this.powerUpAudio = new Audio('./audio/power-up-audio.mp3');
+    this.gameOverAudio = new Audio('./audio/game-over-audio.mp3');
     this.obstacleCollection = [
       {
         path: "./images/space_creature1.gif",
@@ -128,6 +135,7 @@ class Game {
 
     // Create new bullet after every bulletSpeed frames and delete removed bullets from array 
     if (this.currentBulletFrame % this.bulletSpeed === 0) {
+      if (this.volume) this.bulletAudio.play();
       if (this.bulletCount === 1 || this.bulletCount === 3)
         this.bullets.push(new Bullet(this.gameScreen, this.player, "center"));
       if (this.bulletCount === 2 || this.bulletCount === 3) {
@@ -172,6 +180,7 @@ class Game {
               currentObstacle.sustain -= 1;
               if (currentObstacle.sustain === 0) {
                 currentObstacle.element.src = './images/blast.gif';
+                this.explosionAudio.play();
                 setTimeout(() => {
                   currentObstacle.element.remove();
                 }, 600);
@@ -188,16 +197,29 @@ class Game {
         const lifeToRemove = this.lifeElement.querySelector(`img:nth-child(${this.lifes})`)
         lifeToRemove.remove();
         this.lifes -= 1;
-
         this.player.element.src = "./images/collide-ship.png";
-        setTimeout(() => {
-          this.player.element.src = "./images/ship.png"
-        }, 1000);
-
+        this.flickerPlayer = true;
         currentObstacle.element.remove();
-        if (this.lifes === 0) this.gameIsOver = true;
+        if (this.lifes === 0) {
+          this.gameIsOver = true;
+          this.gameOverAudio.play();
+        } else {
+          this.collisionAudio.play();
+        }
       }
     });
+
+    if (this.flickerPlayer) {
+      this.flickerPlayerTime -= 1;
+      this.player.element.style.opacity = this.player.element.style.opacity === "0" ? "1" : "0";
+    }
+
+    if (this.flickerPlayerTime === 0) {
+      this.flickerPlayer = false;
+      this.flickerPlayerTime = 100;
+      this.player.element.src = "./images/ship.png";
+      this.player.element.style.opacity = "1";
+    }
 
     // Create one new obstacle after every 100 frames and delete removed obstacle from array 
     if (this.currentObstacleFrame % 50 === 0) {
@@ -220,6 +242,7 @@ class Game {
         currentPower.renderObject();
 
       if (currentPower.collectPower(this.player)) {
+        this.powerUpAudio.play();
         currentPower.element.remove();
         switch (currentPower.behaviour) {
           case "bulletPower": {
@@ -268,7 +291,7 @@ class Game {
       liElement.innerText = `${currentScore.score} by ${currentScore.playerName}`;
       this.highScoreList.appendChild(liElement);
     });
-    this.endMessage.innerText = this.score && scoreList[0].score <= this.score ? "Good Job" : "Better luck next time";
+    this.endMessage.innerText = this.score && scoreList[0].score <= this.score ? "Congratulations! You set new high score" : "Better luck next time";
     localStorage.setItem("highScore", JSON.stringify(scoreList));   // Update high score list in local storage
   }
 

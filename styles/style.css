@@ -59,10 +59,12 @@ body {
   line-height: 1.7;
 }
 
-#start-form {
+#start-form,
+#settings {
   display: flex;
   justify-content: center;
   align-content: center;
+  align-items: center;
 }
 
 input {
@@ -86,6 +88,19 @@ input {
   text-shadow: 1px 1px red, 0 0 1em blue;
   margin: 10px;
   font-family: inherit;
+}
+
+#mute-button {
+  border: 2mm ridge #522911;
+  border-radius: 5px;
+  height: 50px;
+  width: 50px;
+  margin: 10px;
+  background-image: url("../images/mute.png");
+  background-position: center center;
+  padding: 10px;
+  background-size: 80%;
+  background-repeat: no-repeat;
 }
 
 #start-button:hover,
@@ -208,18 +223,18 @@ input {
 
   input {
     width: 160px;
-    height: 35px;
-    border: 2mm ridge #522911;
-    border-radius: 5px;
-    margin: 10px;
-    font-family: inherit;
+    height: 21px;
   }
 
   #start-button,
-  #instruction-button,
-  #start-button {
+  #instruction-button {
     font-size: 0.8em;
     padding: 5px;
+  }
+
+  #mute-button {
+    height: 21px;
+    width: 21px;
   }
 
   #instructions {
