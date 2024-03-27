@@ -3,8 +3,7 @@ class SpaceObject {
     this.gameScreen = gameScreen;
     this.width = spaceObject.width;
     this.height = spaceObject.height;
-    this.top = -this.height;
-    this.left = Math.floor(Math.random() * (this.gameScreen.clientWidth - this.width - 260)) + 130;
+    this.type = spaceObject.type;
 
     this.element = document.createElement("img");
     this.element.src = spaceObject.path;
@@ -14,10 +13,11 @@ class SpaceObject {
     this.element.style.left = `${this.left}px`;
     this.element.style.position = "absolute"
     this.gameScreen.appendChild(this.element);
+    this.remove = false;
   }
 
-  renderObject() {
-    this.top += 4;
-    this.element.style.top = `${this.top}px`;
+  renderObject(top, left) {
+    this.element.style.top = `${top}px`;
+    this.element.style.left = `${left}px`;
   }
 }

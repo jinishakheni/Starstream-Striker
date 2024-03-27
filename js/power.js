@@ -2,6 +2,14 @@ class Power extends SpaceObject {
   constructor(gameScreen, power) {
     super(gameScreen, power);
     this.behaviour = power.behaviour;
+    this.top = -this.height;
+    this.left = Math.floor(Math.random() * (this.gameScreen.clientWidth - this.width - 260)) + 130;
+    this.renderObject(this.top, this.left);
+  }
+
+  positionPower() {
+    this.top += 6;
+    this.renderObject(this.top, this.left);
   }
 
   collectPower(player) {

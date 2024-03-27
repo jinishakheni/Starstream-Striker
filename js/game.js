@@ -4,13 +4,13 @@ class Game {
     this.gameScreen = document.querySelector("#game-screen");
     this.endScreen = document.querySelector("#game-end");
     this.scoreDisplay = document.querySelector("#score span");
+    this.lifeDisplay = document.querySelector("#life");
     this.endScore = document.querySelector("#game-end span");
     this.endMessage = document.querySelector("#game-end p");
 
     this.inputField = document.querySelector("#start-form input");
     this.playerName = this.inputField.value;
     this.highScoreList = document.querySelector(".high-score-list");
-    this.lifeElement = document.querySelector("#life");
     this.highScore = JSON.parse(localStorage.getItem("highScore")) ?? [];
     this.volume = Number(localStorage.getItem("volume"));
 
@@ -20,7 +20,7 @@ class Game {
     this.powers = []; // Power
 
     this.score = 0; // Game score
-    this.lifes = 3; // Player lifes
+    this.life = 3; // Player lifes
     this.gameIsOver = false;  // Game status
 
     this.gameIntervalId;    // stores interval id
@@ -44,56 +44,66 @@ class Game {
     this.bulletAudio = new Audio('./audio/bullet-audio.mp3');
     this.powerUpAudio = new Audio('./audio/power-up-audio.mp3');
     this.gameOverAudio = new Audio('./audio/game-over-audio.mp3');
+
     this.obstacleCollection = [
       {
         path: "./images/space_creature1.gif",
         height: 80,
         width: 100,
-        sustain: 3
+        sustain: 3,
+        type: "creature"
       },
       {
         path: "./images/space_creature2.gif",
         height: 100,
         width: 100,
-        sustain: 3
+        sustain: 3,
+        type: "creature"
       },
       {
         path: "./images/rock1.png",
         height: 80,
         width: 80,
-        sustain: 2
+        sustain: 2,
+        type: "asteroid"
       },
       {
         path: "./images/enemy_warship1.gif",
         height: 80,
         width: 60,
-        sustain: 4
+        sustain: 4,
+        type: "enemy"
       },
       {
         path: "./images/enemy_warship2.png",
         height: 60,
         width: 100,
-        sustain: 4
+        sustain: 4,
+        type: "enemy"
       },
       {
         path: "./images/enemy_warship3.png",
         height: 70,
         width: 90,
-        sustain: 4
+        sustain: 4,
+        type: "enemy"
       }
     ]
     this.powerCardCollection = [
       {
         path: "./images/power2.png",
-        behaviour: "bulletPower"
+        behaviour: "bulletPower",
+        type: "card"
       },
       {
         path: "./images/power3.png",
-        behaviour: "shipPower"
+        behaviour: "shipPower",
+        type: "card"
       },
       {
         path: "./images/power4.png",
-        behaviour: "boosterPower"
+        behaviour: "boosterPower",
+        type: "card"
       }
     ];
   }
@@ -102,57 +112,62 @@ class Game {
     this.introScreen.style.display = "none";  // Hide the start screen
     this.gameScreen.style.display = "flex";   // Show the game screen
 
-    // Show default score and lives
+    // Show default score and lifes
     this.scoreDisplay.innerText = 0;
-    for (let index = 0; index < this.lifes; index++) {
+    for (let index = 0; index < this.life; index++) {
       const element = document.createElement("img");
       element.src = "./images/life.png";
       element.style.width = "30px";
       element.style.height = "30px";
       element.style.padding = "5px";
-      this.lifeElement.appendChild(element);
+      this.lifeDisplay.appendChild(element);
     }
+
     this.player = new Player(this.gameScreen);  // Initialize player
     this.animateGame();
   }
 
   restartGame() {
-    this.introScreen.style.display = "flex";    // Hide the start screen
-    this.endScreen.style.display = "none";    // Show the game screen
+    this.endScreen.style.display = "none";    // Hide the game end screen
+    this.introScreen.style.display = "flex";    // Show the game start screen
   }
 
   renderBullets() {
     this.currentBulletFrame += 1;
+    this.bullets = this.bullets.filter(bullet => !bullet.remove);    // Remove bullets which are reached out of the screen
 
-    // Render and Remove bullets from the screen
+    // Render and remove bullets from the screen
     this.bullets.forEach(currentBullet => {
       if (currentBullet.top <= 0) {
-        currentBullet.element.remove();
         currentBullet.remove = true;
+        currentBullet.element.remove();
       } else
         currentBullet.renderBullet();
     });
 
-    // Create new bullet after every bulletSpeed frames and delete removed bullets from array 
+    // Create new bullet after every bulletSpeed frames
     if (this.currentBulletFrame % this.bulletSpeed === 0) {
       if (this.volume) this.bulletAudio.play();
+      // Activate ship's center booster
       if (this.bulletCount === 1 || this.bulletCount === 3)
         this.bullets.push(new Bullet(this.gameScreen, this.player, "center"));
+      // Activate ship's right & left booster
       if (this.bulletCount === 2 || this.bulletCount === 3) {
         this.bullets.push(new Bullet(this.gameScreen, this.player, "left"));
         this.bullets.push(new Bullet(this.gameScreen, this.player, "right"));
       }
-
-      this.bullets = this.bullets.filter(bullet => !bullet.remove);    // Remove bullet from array after bullet element removed from the screen
     }
 
     if (this.bulletSpeedFlag) this.bulletSpeedTimeLimit -= 1;
+    // Reset bullet speed
     if (!this.bulletSpeedTimeLimit) {
       this.bulletSpeedFlag = false;
       this.bulletSpeed = 20;
       this.bulletSpeedTimeLimit = 300;
     }
+
     if (this.bulletCountFlag) this.bulletCountTimeLimit -= 1;
+    // Reset bullet count
     if (!this.bulletCountTimeLimit) {
       this.bulletCountFlag = false;
       this.bulletCount = 1;
@@ -161,16 +176,16 @@ class Game {
   }
 
   renderObstacles() {
-    let removeObstacle = false;
     this.currentObstacleFrame += 1;
+    this.obstacles = this.obstacles.filter(obstacle => !obstacle.remove);   // Remove obstacles which are reached out of the screen
 
     // Render and Remove obstacle from the screen
     this.obstacles.forEach(currentObstacle => {
-      if (currentObstacle.top >= this.gameScreen.clientHeight) {
-        removeObstacle = true;
+      if (currentObstacle.top >= this.gameScreen.clientHeight || currentObstacle.left < -currentObstacle.width || currentObstacle.left > this.gameScreen.clientWidth) {
+        currentObstacle.remove = true;
         currentObstacle.element.remove();
       } else {
-        currentObstacle.renderObject();
+        currentObstacle.positionObstacle();
 
         // Check bullet hit to obstacle
         this.bullets.forEach(currentBullet => {
@@ -194,13 +209,13 @@ class Game {
 
       // Check for obstacle collision with ship
       if (this.player.didCollide(currentObstacle)) {
-        const lifeToRemove = this.lifeElement.querySelector(`img:nth-child(${this.lifes})`)
+        const lifeToRemove = this.lifeDisplay.querySelector(`img:nth-child(${this.life})`)
         lifeToRemove.remove();
-        this.lifes -= 1;
         this.player.element.src = "./images/collide-ship.png";
         this.flickerPlayer = true;
         currentObstacle.element.remove();
-        if (this.lifes === 0) {
+        this.life -= 1;
+        if (this.life === 0) {
           this.gameIsOver = true;
           this.gameOverAudio.play();
         } else {
@@ -221,44 +236,42 @@ class Game {
       this.player.element.style.opacity = "1";
     }
 
-    // Create one new obstacle after every 100 frames and delete removed obstacle from array 
+    // Create one new obstacle after every 50 frames 
     if (this.currentObstacleFrame % 50 === 0) {
       this.obstacles.push(new Obstacle(this.gameScreen, this.obstacleCollection[Math.floor(Math.random() * this.obstacleCollection.length)]));
-
-      if (removeObstacle) this.obstacles.splice(0, 1);  // Remove obstacle from array after obstacle element removed from the screen
     }
   }
 
   renderPowerCard() {
-    let removePower = false;
     this.currentPowerFrame += 1;
+    this.powers = this.powers.filter(power => !power.remove);  	// Remove powers which are reached out of the screen
 
     // Render and Remove power card from the screen
     this.powers.forEach(currentPower => {
       if (currentPower.top >= this.gameScreen.clientHeight) {
+        currentPower.remove = true;
         currentPower.element.remove();
-        removePower = true;
       } else
-        currentPower.renderObject();
+        currentPower.positionPower();
 
       if (currentPower.collectPower(this.player)) {
         this.powerUpAudio.play();
         currentPower.element.remove();
         switch (currentPower.behaviour) {
-          case "bulletPower": {
+          case "bulletPower": { 	// Increase bullet firing speed
             this.bulletCount = 1;
             this.bulletSpeed -= 10;
             this.bulletSpeedFlag = true;
             this.bulletSpeedTimeLimit = 300;
             break;
           };
-          case "shipPower": {
+          case "shipPower": {   // Activate ship's side boosters along with center
             this.bulletCount = 3;
             this.bulletCountFlag = true;
             this.bulletCountTimeLimit = 300;
             break;
           };
-          case "boosterPower": {
+          case "boosterPower": {  // Activate ship's side booster and increase bullet firing speed
             this.bulletCount = 2;
             this.bulletCountFlag = true;
             this.bulletCountTimeLimit = 300;
@@ -275,9 +288,7 @@ class Game {
 
     // Create new power after every 500 frames and delete removed power from array
     if (this.currentPowerFrame % 500 === 0) {
-      this.powers.push(new Power(this.gameScreen, { ...this.powerCardCollection[Math.floor(Math.random() * this.powerCardCollection.length)], ...{ height: 40, width: 30 } }));
-
-      if (removePower) this.powers.splice(0, 1);  // Remove bullet from array after bullet element removed from the screen
+      this.powers.push(new Power(this.gameScreen, { ...this.powerCardCollection[Math.floor(Math.random() * this.powerCardCollection.length)], ...{ height: 50, width: 40 } }));
     }
   }
 
@@ -291,8 +302,8 @@ class Game {
       liElement.innerText = `${currentScore.score} by ${currentScore.playerName}`;
       this.highScoreList.appendChild(liElement);
     });
-    this.endMessage.innerText = this.score && scoreList[0].score <= this.score ? "Congratulations! You set new high score" : "Better luck next time";
     localStorage.setItem("highScore", JSON.stringify(scoreList));   // Update high score list in local storage
+    this.endMessage.innerText = this.score && scoreList[0].score <= this.score ? "Congratulations! You set new high score" : "Better luck next time";
   }
 
   endGame() {
@@ -300,7 +311,7 @@ class Game {
     this.obstacles.forEach(currentObstacale => currentObstacale.element.remove());    // Remove obstacles from the screen
     this.bullets.forEach(currentBullet => currentBullet.element.remove());    // Remove bulletes from the screen
     this.powers.forEach(currentPower => currentPower.element.remove());    // Remove power cards from the screen
-    this.lifeElement.innerHTML = "";
+    this.lifeDisplay.innerHTML = "";
 
     // Change display
     this.gameScreen.style.display = "none";

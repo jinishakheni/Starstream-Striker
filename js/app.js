@@ -8,9 +8,9 @@ window.onload = function () {
   startForm.addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent form submission, if the input field is empty
     buttonClickAudio.play();
-    backgroundAudio.volume = parseFloat(0.2);
     game = new Game();
     game.startGame();
+    backgroundAudio.volume = parseFloat(0.1);
   });
 
   restartButton.addEventListener("click", () => {
@@ -42,9 +42,10 @@ window.onload = function () {
       game.player.directionX = 0;
   });
 
-  let backgroundAudio = new Audio('./audio/game-audio.mp3');
+  const buttonClickAudio = new Audio('./audio/button-click-audio.mp3');
+  const backgroundAudio = new Audio('./audio/game-audio.mp3');
   backgroundAudio.loop = true; // Loop the audio
-  backgroundAudio.pause(); // Start playing the audio
+  backgroundAudio.pause(); // Pause the audio in starting
   localStorage.setItem("volume", 0);
   function toggleMute() {
     if (backgroundAudio.paused) {
@@ -58,6 +59,4 @@ window.onload = function () {
     }
   }
   volumeButton.addEventListener('click', toggleMute);
-  const buttonClickAudio = new Audio('./audio/button-click-audio.mp3');
-
 }
