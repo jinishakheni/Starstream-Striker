@@ -51,6 +51,25 @@ body {
 .intro h2 {
   font-size: 1.5em;
   text-shadow: 3px 3px red, 0 0 1em blue, 0 0 1.2em blue;
+  animation: color-change 1s infinite; /* Apply the animation */
+}
+
+@keyframes color-change {
+  0% {
+    color: greenyellow;
+  } /* Start color */
+  25% {
+    color: yellow;
+  } /* Intermediate color */
+  50% {
+    color: green;
+  } /* Intermediate color */
+  75% {
+    color: orange;
+  } /* Intermediate color */
+  100% {
+    color: greenyellow;
+  } /* End color, same as start */
 }
 
 #intro {
@@ -111,16 +130,16 @@ input {
 
 #instructions {
   display: none;
-  width: 350px;
-  height: 340px;
+  width: 400px;
+  height: 315px;
   background-color: rgba(68, 34, 17, 0.9);
   color: white;
   font-size: 10px;
   line-height: 2.3;
   padding: 10px 10px;
   position: absolute;
-  top: 32%;
-  left: 74%;
+  top: 50%;
+  left: 72.8%;
   border: 1px solid white;
 }
 
