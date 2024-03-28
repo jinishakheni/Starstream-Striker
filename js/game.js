@@ -28,16 +28,17 @@ class Game {
 
     this.currentBulletFrame = 0; // Keep track of bullat frames
     this.currentObstacleFrame = 0;  // Keep track of obstacle frames
-    this.currentPowerFrame = 0; // Keeo track of power card
+    this.currentPowerFrame = 0; // Keep track of power card
 
     this.bulletSpeed = 20;
     this.bulletSpeedFlag = false;
-    this.bulletSpeedTimeLimit = 300;
-    this.bulletCount = 1;
-    this.bulletCountFlag = false;
-    this.bulletCountTimeLimit = 300;
+    this.bulletSpeedTimeLimit = 360;
+    this.boosterCount = 1;
+    this.boosterCountFlag = false;
+    this.boosterCountTimeLimit = 360;
     this.flickerPlayer = false;
     this.flickerPlayerTime = 100;
+    this.playerSpeedTimeInterval = 60 * 60;
 
     this.explosionAudio = new Audio('./audio/explosion-audio.mp3');
     this.collisionAudio = new Audio('./audio/respawn-audio.mp3');
@@ -47,14 +48,14 @@ class Game {
 
     this.obstacleCollection = [
       {
-        path: "./images/space_creature1.gif",
+        path: "./images/space-creature1.gif",
         height: 80,
         width: 100,
         sustain: 3,
         type: "creature"
       },
       {
-        path: "./images/space_creature2.gif",
+        path: "./images/space-creature2.gif",
         height: 100,
         width: 100,
         sustain: 3,
@@ -68,21 +69,21 @@ class Game {
         type: "asteroid"
       },
       {
-        path: "./images/enemy_warship1.gif",
+        path: "./images/enemy-warship1.gif",
         height: 80,
         width: 60,
         sustain: 4,
         type: "enemy"
       },
       {
-        path: "./images/enemy_warship2.png",
+        path: "./images/enemy-warship2.png",
         height: 60,
         width: 100,
         sustain: 4,
         type: "enemy"
       },
       {
-        path: "./images/enemy_warship3.png",
+        path: "./images/enemy-warship3.png",
         height: 70,
         width: 90,
         sustain: 4,
@@ -91,19 +92,25 @@ class Game {
     ]
     this.powerCardCollection = [
       {
-        path: "./images/power2.png",
+        path: "./images/coin.gif",
         behaviour: "bulletPower",
-        type: "card"
+        type: "card",
+        height: 50,
+        width: 50
       },
       {
-        path: "./images/power3.png",
+        path: "./images/diamond.gif",
         behaviour: "shipPower",
-        type: "card"
+        type: "card",
+        height: 50,
+        width: 60
       },
       {
-        path: "./images/power4.png",
+        path: "./images/card.gif",
         behaviour: "boosterPower",
-        type: "card"
+        type: "card",
+        height: 65,
+        width: 50
       }
     ];
   }
@@ -149,12 +156,12 @@ class Game {
     if (this.currentBulletFrame % this.bulletSpeed === 0) {
       if (this.volume) this.bulletAudio.play();
       // Activate ship's center booster
-      if (this.bulletCount === 1 || this.bulletCount === 3)
-        this.bullets.push(new Bullet(this.gameScreen, this.player, "center"));
+      if (this.boosterCount === 1 || this.boosterCount === 3)
+        this.bullets.push(new PlayerBullet(this.gameScreen, this.player, "center"));
       // Activate ship's right & left booster
-      if (this.bulletCount === 2 || this.bulletCount === 3) {
-        this.bullets.push(new Bullet(this.gameScreen, this.player, "left"));
-        this.bullets.push(new Bullet(this.gameScreen, this.player, "right"));
+      if (this.boosterCount === 2 || this.boosterCount === 3) {
+        this.bullets.push(new PlayerBullet(this.gameScreen, this.player, "left"));
+        this.bullets.push(new PlayerBullet(this.gameScreen, this.player, "right"));
       }
     }
 
@@ -166,12 +173,12 @@ class Game {
       this.bulletSpeedTimeLimit = 300;
     }
 
-    if (this.bulletCountFlag) this.bulletCountTimeLimit -= 1;
-    // Reset bullet count
-    if (!this.bulletCountTimeLimit) {
-      this.bulletCountFlag = false;
-      this.bulletCount = 1;
-      this.bulletCountTimeLimit = 300;
+    if (this.boosterCountFlag) this.boosterCountTimeLimit -= 1;
+    // Reset booster count
+    if (!this.boosterCountTimeLimit) {
+      this.boosterCountFlag = false;
+      this.boosterCount = 1;
+      this.boosterCountTimeLimit = 300;
     }
   }
 
@@ -185,12 +192,12 @@ class Game {
         currentObstacle.remove = true;
         currentObstacle.element.remove();
       } else {
-        currentObstacle.positionObstacle();
+        currentObstacle.moveObstacle();
 
         // Check bullet hit to obstacle
         this.bullets.forEach(currentBullet => {
           if (currentBullet.top <= (currentObstacle.top + currentObstacle.height) && (currentBullet.top + currentBullet.height) > currentObstacle.top) {
-            if (currentObstacle.attackObstacle(currentBullet)) {
+            if (currentObstacle.type !== "enemyBullet" && currentObstacle.attackObstacle(currentBullet)) {
               currentBullet.element.remove();
               currentObstacle.sustain -= 1;
               if (currentObstacle.sustain === 0) {
@@ -201,10 +208,22 @@ class Game {
                 }, 600);
                 this.score += 1;
                 this.scoreDisplay.innerText = this.score;
+                currentObstacle.remove = true;
               }
             }
           }
         });
+      }
+
+      if (currentObstacle.type === "enemy") {
+        if (currentObstacle.bulletCount && currentObstacle.shootTime === 120) {
+          this.obstacles.push(new EnemyBullet(this.gameScreen, currentObstacle));
+          currentObstacle.shootTime -= 1;
+        } else if (currentObstacle.shootTime === 0) {
+          currentObstacle.shootTime = 120;
+          currentObstacle.bulletCount -= 1;
+        } else
+          currentObstacle.shootTime -= 1;
       }
 
       // Check for obstacle collision with ship
@@ -252,7 +271,7 @@ class Game {
         currentPower.remove = true;
         currentPower.element.remove();
       } else
-        currentPower.positionPower();
+        currentPower.movePower();
 
       if (currentPower.collectPower(this.player)) {
         this.powerUpAudio.play();
@@ -266,15 +285,15 @@ class Game {
             break;
           };
           case "shipPower": {   // Activate ship's side boosters along with center
-            this.bulletCount = 3;
-            this.bulletCountFlag = true;
-            this.bulletCountTimeLimit = 300;
+            this.boosterCount = 3;
+            this.boosterCountFlag = true;
+            this.boosterCountTimeLimit = 300;
             break;
           };
           case "boosterPower": {  // Activate ship's side booster and increase bullet firing speed
-            this.bulletCount = 2;
-            this.bulletCountFlag = true;
-            this.bulletCountTimeLimit = 300;
+            this.boosterCount = 2;
+            this.boosterCountFlag = true;
+            this.boosterCountTimeLimit = 300;
             this.bulletSpeed -= 10;
             this.bulletSpeedFlag = true;
             this.bulletSpeedTimeLimit = 300;
@@ -288,7 +307,7 @@ class Game {
 
     // Create new power after every 500 frames and delete removed power from array
     if (this.currentPowerFrame % 500 === 0) {
-      this.powers.push(new Power(this.gameScreen, { ...this.powerCardCollection[Math.floor(Math.random() * this.powerCardCollection.length)], ...{ height: 50, width: 40 } }));
+      this.powers.push(new Power(this.gameScreen, this.powerCardCollection[Math.floor(Math.random() * this.powerCardCollection.length)]));
     }
   }
 
@@ -325,6 +344,12 @@ class Game {
 
   animateGame() {
     this.gameIntervalId = setInterval(() => {
+      this.playerSpeedTimeInterval -= 1;
+      if (this.playerSpeedTimeInterval === 0) {
+        console.log("1 minute complete");
+        this.playerSpeedTimeInterval = 60 * 60;
+        this.player.speed += 2;
+      }
       this.player.renderPlayer(this.gameScreen);    //  Render player in the screen
       this.renderBullets();   //  Render Bullets
       this.renderObstacles();   //  Render Obstacles

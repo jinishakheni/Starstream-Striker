@@ -11,21 +11,27 @@ class Obstacle extends SpaceObject {
         this.direction = -this.direction;
       }
       this.top = Math.floor(Math.random() * (this.gameScreen.clientHeight / 2));
-    }
-    else {
-      this.direction = 0;
+    } else {
+      if (this.type === "enemy") {
+        this.bulletCount = Math.floor(Math.random() * 3);
+        this.shootTime = this.bulletCount > 0 ? 60 : 0;
+      }
       this.top = -this.height;
       this.left = Math.floor(Math.random() * (this.gameScreen.clientWidth - this.width - 260)) + 130;
     }
     this.renderObject(this.top, this.left);
   }
 
-  positionObstacle() {
-    if (this.type === "creature") {
-      this.top += 2;
-      this.left += this.direction;
-    } else {
-      this.top += 4;
+  moveObstacle() {
+    switch (this.type) {
+      case "creature": {
+        this.top += 2;
+        this.left += this.direction;
+        break;
+      };
+      case "asteroid": this.top += 4.2;
+      case "enemy": this.top += 4;
+      default: break;
     }
     this.renderObject(this.top, this.left);
   }

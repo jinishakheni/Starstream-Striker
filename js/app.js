@@ -3,8 +3,14 @@ window.onload = function () {
   const startForm = document.querySelector("#start-form");
   const restartButton = document.querySelector("#restart-button");
   const volumeButton = document.querySelector("#mute-button");
+  const buttonClickAudio = new Audio('./audio/button-click-audio.mp3');
+  const backgroundAudio = new Audio('./audio/game-audio.mp3');
+  backgroundAudio.loop = true; // Loop the audio
+  backgroundAudio.pause(); // Pause the audio in starting
+  localStorage.setItem("volume", 0);
   let game;
 
+  // Submit button event listner
   startForm.addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent form submission, if the input field is empty
     buttonClickAudio.play();
@@ -13,6 +19,7 @@ window.onload = function () {
     backgroundAudio.volume = parseFloat(0.1);
   });
 
+  // Restart button event listner
   restartButton.addEventListener("click", () => {
     buttonClickAudio.play();
     game.restartGame();
@@ -42,11 +49,6 @@ window.onload = function () {
       game.player.directionX = 0;
   });
 
-  const buttonClickAudio = new Audio('./audio/button-click-audio.mp3');
-  const backgroundAudio = new Audio('./audio/game-audio.mp3');
-  backgroundAudio.loop = true; // Loop the audio
-  backgroundAudio.pause(); // Pause the audio in starting
-  localStorage.setItem("volume", 0);
   function toggleMute() {
     if (backgroundAudio.paused) {
       backgroundAudio.play();

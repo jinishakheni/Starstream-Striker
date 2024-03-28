@@ -19,7 +19,7 @@ body {
 
 .middle-box {
   width: 700px;
-  height: 650px;
+  height: 670px;
   background-color: rgba(0, 0, 0, 0.5); /* Transparent white background */
   display: flex;
   flex-flow: column nowrap;
@@ -111,16 +111,16 @@ input {
 
 #instructions {
   display: none;
-  width: 670px;
-  height: 90px;
-  background-color: black;
+  width: 350px;
+  height: 340px;
+  background-color: rgba(68, 34, 17, 0.9);
   color: white;
   font-size: 10px;
   line-height: 2.3;
   padding: 10px 10px;
   position: absolute;
-  top: 59%;
-  left: 27.5%;
+  top: 32%;
+  left: 74%;
   border: 1px solid white;
 }
 

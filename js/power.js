@@ -7,8 +7,8 @@ class Power extends SpaceObject {
     this.renderObject(this.top, this.left);
   }
 
-  positionPower() {
-    this.top += 6;
+  movePower() {
+    this.top += 5;
     this.renderObject(this.top, this.left);
   }
 
