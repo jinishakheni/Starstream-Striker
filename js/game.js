@@ -346,7 +346,6 @@ class Game {
     this.gameIntervalId = setInterval(() => {
       this.playerSpeedTimeInterval -= 1;
       if (this.playerSpeedTimeInterval === 0) {
-        console.log("1 minute complete");
         this.playerSpeedTimeInterval = 60 * 60;
         this.player.speed += 2;
       }
