@@ -184,12 +184,12 @@ Starstream-Striker is the game where you pilot your warship and navigate through
 
 ## Trello
 
-[Play the Game!](https://trello.com/b/CF9H8bC3/starstream-striker)
+[Board](https://trello.com/b/CF9H8bC3/starstream-striker)
 
 ## Slides
 
-[Link] (https://docs.google.com/presentation/d/1ZdUQweuXioQ13f33umPvHWDFXR8MhG0bfxR80056RKk/edit#slide=id.g2c74d4e54fc_0_2)
+[Presentation](https://docs.google.com/presentation/d/1ZdUQweuXioQ13f33umPvHWDFXR8MhG0bfxR80056RKk/edit#slide=id.g2c74d4e54fc_0_2)
 
 ## Deploy
 
-[Link] (https://jinishakheni.github.io/Starstream-Striker/)
+[Game](https://jinishakheni.github.io/Starstream-Striker/)
