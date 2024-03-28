@@ -188,7 +188,7 @@ Starstream-Striker is the game where you pilot your warship and navigate through
 
 ## Slides
 
-[Presentation](https://docs.google.com/presentation/d/1ZdUQweuXioQ13f33umPvHWDFXR8MhG0bfxR80056RKk/edit#slide=id.g2c74d4e54fc_0_2)
+[Presentation](https://docs.google.com/presentation/d/1ZdUQweuXioQ13f33umPvHWDFXR8MhG0bfxR80056RKk/edit#slide=id.p)
 
 ## Deploy
 
