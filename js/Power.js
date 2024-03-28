@@ -18,5 +18,4 @@ class Power extends SpaceObject {
 
     return playerRect.left < powerRect.right && playerRect.right > powerRect.left && playerRect.top < powerRect.bottom && playerRect.bottom > powerRect.top;
   }
-
 }

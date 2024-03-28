@@ -24,7 +24,7 @@ class Game {
     this.gameIsOver = false;  // Game status
 
     this.gameIntervalId;    // stores interval id
-    this.gameLoopFrecuency = Math.round(1000 / 60); // update 60 frames per second
+    this.gameLoopFrequency = Math.round(1000 / 60); // update 60 frames per second
 
     this.currentBulletFrame = 0; // Keep track of bullat frames
     this.currentObstacleFrame = 0;  // Keep track of obstacle frames
@@ -39,6 +39,7 @@ class Game {
     this.flickerPlayer = false;
     this.flickerPlayerTime = 100;
     this.playerSpeedTimeInterval = 60 * 60;
+    this.obstaclesFrequency = 50;
 
     this.explosionAudio = new Audio('./audio/explosion-audio.mp3');
     this.collisionAudio = new Audio('./audio/respawn-audio.mp3');
@@ -255,8 +256,8 @@ class Game {
       this.player.element.style.opacity = "1";
     }
 
-    // Create one new obstacle after every 50 frames 
-    if (this.currentObstacleFrame % 50 === 0) {
+    // Create one new obstacle after every obstaclesFrequency frames
+    if (this.currentObstacleFrame % this.obstaclesFrequency === 0) {
       this.obstacles.push(new Obstacle(this.gameScreen, this.obstacleCollection[Math.floor(Math.random() * this.obstacleCollection.length)]));
     }
   }
@@ -348,12 +349,13 @@ class Game {
       if (this.playerSpeedTimeInterval === 0) {
         this.playerSpeedTimeInterval = 60 * 60;
         this.player.speed += 2;
+        this.obstaclesFrequency -= 10;
       }
       this.player.renderPlayer(this.gameScreen);    //  Render player in the screen
       this.renderBullets();   //  Render Bullets
       this.renderObstacles();   //  Render Obstacles
       this.renderPowerCard();   //  Render Powercard
       if (this.gameIsOver) this.endGame();    //  While game is over
-    }, this.gameLoopFrecuency);
+    }, this.gameLoopFrequency);
   }
 }

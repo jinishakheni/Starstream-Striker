@@ -18,7 +18,8 @@ Starstream-Striker is the game where you pilot your warship and navigate through
 - Enemy ship will randomly fire bullets.
 - Each successful blast of obstacles increases 1 point.
 - Player will have 3 lives. Each life is reduced after hit by any obstacle or blast.
-- Random power up card will come from top, which helps player by increasing fire rate in three different forms:- one by increasing just bullet speed, second by firing 2 bullets at the same time and parallely increasing the bullet speed, third by firing 3 bullets at the same time.
+- Random power up card will come from top, which helps player by increasing fire rate in three different forms:- Gold Coin increasing just bullet speed, Magic card by firing 2 bullets at the same time and parallely increasing the bullet speed, Diamond by firing 3 bullets at the same time.
+- The game difficulty increases as the game progresses. This changes both the moving speed of warship and frequency of obstacles.
 - Game score is calculated based on the amount of obstacles destroyed.
 - Top 8 high-Scores are tracked locally with a player name and score.
 
@@ -91,6 +92,7 @@ Starstream-Striker is the game where you pilot your warship and navigate through
   - this.flickerPlayer
   - this.flickerPlayerTime
   - this.playerSpeedTimeInterval
+  - this.obstaclesFrequency
   - this.explosionAudio
   - this.collisionAudio
   - this.bulletAudio
