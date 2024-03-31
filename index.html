@@ -26,10 +26,11 @@
               <p>
                 In the endless reaches of space, your spaceship speeds ahead,
                 facing a constant stream of dangers from all sides. Dodge
-                asteroids and blast away alien enemies with your continuous
-                barrage of bullets. <br />
-                Your mission: Save the galaxy from destruction and become a hero
-                of the stars.
+                asteroids and blast away enemy ships and creatures with your
+                continuous barrage of bullets. <br />
+                Your mission: Eliminate as many enemies as possible,
+                establishing yourself as the foremost space warrior and
+                safeguard the galaxy from annihilation.
               </p>
             </div>
           </div>
@@ -40,11 +41,15 @@
           <div id="settings">
             <button id="instruction-button">Instruction</button>
             <div id="instructions">
-              Use the arrow keys on your keyboard to move your spaceship<br />
-              The spaceship fires bullets continuously, and every space object
-              will be destroyed after sustaining five hits from the bullets.<br />
-              Don't let your spaceship collide with them, you will have 3
-              lives<br />
+              - Pilot your spaceship using arrow keys.<br />
+              - The spaceship fires bullets continuously, destroy enemy ships (4
+              bullets), space creatures (3 bullets) and asteroids (2 bullets).
+              <br />
+              - Each successful blast earns you 1 point. <br />
+              - Don't let your spaceship collide with them and also dodge your
+              spaceship from enemy bullets, you will have 3 lives.<br />
+              - Beware of powers for strategic advantages. <br />
+              - Difficulty level increases as the game progresses.
             </div>
             <button id="mute-button"></button>
           </div>
@@ -71,12 +76,13 @@
         </div>
       </div>
     </main>
-    <script src="./js/space.js"></script>
-    <script src="./js/power.js"></script>
-    <script src="./js/obstacle.js"></script>
-    <script src="./js/bullet.js"></script>
-    <script src="./js/player.js"></script>
-    <script src="./js/game.js"></script>
+    <script src="./js/SpaceObject.js"></script>
+    <script src="./js/EnemyBullet.js"></script>
+    <script src="./js/Power.js"></script>
+    <script src="./js/Obstacle.js"></script>
+    <script src="./js/PlayerBullet.js"></script>
+    <script src="./js/Player.js"></script>
+    <script src="./js/Game.js"></script>
     <script src="./js/app.js"></script>
   </body>
 </html>
